@@ -3,6 +3,7 @@ package com.smthasa.myfancypdfinvoices.service;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import com.google.inject.Inject;
 import com.smthasa.myfancypdfinvoices.model.Invoice;
 import com.smthasa.myfancypdfinvoices.model.User;
 
@@ -11,6 +12,7 @@ public class InvoiceService {
 
     private List<Invoice> invoices = new CopyOnWriteArrayList<Invoice>();
 
+    @Inject
     public InvoiceService(UserService userService) {
         this.userService = userService;
     }

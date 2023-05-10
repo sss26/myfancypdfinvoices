@@ -7,10 +7,21 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.smthasa.myfancypdfinvoices.context.Application;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.inject.Inject;
 import com.smthasa.myfancypdfinvoices.model.Invoice;
+import com.smthasa.myfancypdfinvoices.service.InvoiceService;
 
 public class MyFancyPdfInvoicesServlet extends HttpServlet {
+
+	private InvoiceService invoiceService;
+	private ObjectMapper mapper;
+
+	@Inject
+	public MyFancyPdfInvoicesServlet(InvoiceService invoiceService, ObjectMapper mapper) {
+		this.mapper = mapper;
+		this.invoiceService = invoiceService;
+	}
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -19,10 +30,10 @@ public class MyFancyPdfInvoicesServlet extends HttpServlet {
             String userId = request.getParameter("user_id");
             Integer amount = Integer.valueOf(request.getParameter("amount"));
 
-            Invoice invoice = Application.invoiceService.create(userId, amount);
+            Invoice invoice = invoiceService.create(userId, amount);
 
             response.setContentType("application/json; charset=UTF-8");
-            String json = Application.objectMapper.writeValueAsString(invoice);
+            String json = mapper.writeValueAsString(invoice);
             response.getWriter().print(json);
         } else {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -42,8 +53,8 @@ public class MyFancyPdfInvoicesServlet extends HttpServlet {
                             "</html>");
         } else if (request.getRequestURI().equalsIgnoreCase("/invoices")) {
             response.setContentType("application/json; charset=UTF-8");
-            List<Invoice> invoices = Application.invoiceService.findAll();
-            response.getWriter().print(Application.objectMapper.writeValueAsString(invoices));
+            List<Invoice> invoices = invoiceService.findAll();
+            response.getWriter().print(mapper.writeValueAsString(invoices));
         }
     }
 }

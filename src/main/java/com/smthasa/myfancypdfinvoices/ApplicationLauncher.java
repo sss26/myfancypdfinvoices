@@ -5,6 +5,9 @@ import org.apache.catalina.LifecycleException;
 import org.apache.catalina.Wrapper;
 import org.apache.catalina.startup.Tomcat;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.smthasa.myfancypdfinvoices.module.ApplicationModule;
 import com.smthasa.myfancypdfinvoices.web.MyFancyPdfInvoicesServlet;
 
 public class ApplicationLauncher {
@@ -15,10 +18,13 @@ public class ApplicationLauncher {
         tomcat.setPort(8080);
         tomcat.getConnector();
 
+        Injector injector = Guice.createInjector(new ApplicationModule());
+        MyFancyPdfInvoicesServlet servlet = injector.getInstance(MyFancyPdfInvoicesServlet.class);
+
         Context ctx = tomcat.addContext("", null);
-        Wrapper servlet = Tomcat.addServlet(ctx, "myFirstServlet", new MyFancyPdfInvoicesServlet());
-        servlet.setLoadOnStartup(1);
-        servlet.addMapping("/*");
+        Wrapper wrappedServlet = Tomcat.addServlet(ctx, "myFirstServlet", servlet);
+        wrappedServlet.setLoadOnStartup(1);
+        wrappedServlet.addMapping("/*");
 
         tomcat.start();
     }
