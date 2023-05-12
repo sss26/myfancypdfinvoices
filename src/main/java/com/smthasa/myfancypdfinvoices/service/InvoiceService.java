@@ -3,6 +3,9 @@ package com.smthasa.myfancypdfinvoices.service;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
 import org.springframework.stereotype.Component;
 
 import com.smthasa.myfancypdfinvoices.model.Invoice;
@@ -13,6 +16,18 @@ public class InvoiceService {
     private final UserService userService;
 
     private List<Invoice> invoices = new CopyOnWriteArrayList<Invoice>();
+
+    @PostConstruct
+    public void init() {
+        System.out.println("Fetching PDF Template from S3...");
+        // TODO download from s3 and save locally
+    }
+
+    @PreDestroy
+    public void shutdown() {
+        System.out.println("Deleting downloaded templates...");
+        // TODO actual deletion of PDFs
+    }
 
     public InvoiceService(UserService userService) {
         this.userService = userService;
