@@ -3,9 +3,12 @@ package com.smthasa.myfancypdfinvoices.service;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.springframework.stereotype.Component;
+
 import com.smthasa.myfancypdfinvoices.model.Invoice;
 import com.smthasa.myfancypdfinvoices.model.User;
 
+@Component
 public class InvoiceService {
 	private final UserService userService;
 
