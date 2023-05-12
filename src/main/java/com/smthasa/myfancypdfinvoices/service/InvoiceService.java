@@ -10,7 +10,7 @@ import com.smthasa.myfancypdfinvoices.model.User;
 
 @Component
 public class InvoiceService {
-	private final UserService userService;
+    private final UserService userService;
 
     private List<Invoice> invoices = new CopyOnWriteArrayList<Invoice>();
 
