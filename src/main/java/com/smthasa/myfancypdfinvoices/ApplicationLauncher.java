@@ -12,7 +12,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
-import com.smthasa.myfancypdfinvoices.context.MyFancyPdfInvoicesApplicationConfiguration;
+import com.smthasa.myfancypdfinvoices.context.ApplicationConfiguration;
 
 public class ApplicationLauncher {
 
@@ -50,7 +50,7 @@ public class ApplicationLauncher {
 
     public static WebApplicationContext createApplicationContext(ServletContext servletContext) {
         AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
-        ctx.register(MyFancyPdfInvoicesApplicationConfiguration.class);
+        ctx.register(ApplicationConfiguration.class);
         ctx.setServletContext(servletContext);
         ctx.refresh();
         ctx.registerShutdownHook();
