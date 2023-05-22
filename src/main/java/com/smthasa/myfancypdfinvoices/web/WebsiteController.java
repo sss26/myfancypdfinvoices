@@ -2,10 +2,17 @@ package com.smthasa.myfancypdfinvoices.web;
 
 import java.util.Date;
 
+import javax.validation.Valid;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.smthasa.myfancypdfinvoices.web.forms.LoginForm;
 
 @Controller
 public class WebsiteController {
@@ -15,5 +22,23 @@ public class WebsiteController {
         model.addAttribute("username", username);
         model.addAttribute("currentDate", new Date());
         return "index.html";
+    }
+
+    @GetMapping("/login")
+    public String login(Model model){
+        model.addAttribute("loginForm", new LoginForm());
+        return "login.html";
+    }
+
+    @PostMapping("/login")
+    public String login(@ModelAttribute @Valid LoginForm loginForm, BindingResult bindingResult, Model model){
+        if (bindingResult.hasErrors()) {
+            return "login.html";
+        } else if (loginForm.getUsername().equals(loginForm.getPassword())) {
+            return "redirect:/";
+        } else {
+            model.addAttribute("invalidCredentials", "true");
+            return "login.html";
+        }
     }
 }
