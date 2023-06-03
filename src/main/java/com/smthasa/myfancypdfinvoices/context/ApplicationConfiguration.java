@@ -1,5 +1,8 @@
 package com.smthasa.myfancypdfinvoices.context;
 
+import javax.sql.DataSource;
+
+import org.h2.jdbcx.JdbcDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -27,10 +30,21 @@ public class ApplicationConfiguration {
     }
 
     @Bean
+    public DataSource dataSource() {
+        JdbcDataSource ds = new JdbcDataSource();
+        ds.setURL("jdbc:h2:~/myFirstH2Database;INIT=RUNSCRIPT FROM 'classpath:schema.sql'");
+        ds.setUser("sa");
+        ds.setPassword("sa");
+        return ds;
+    }
+
+    @Bean
     public ObjectMapper objectMapper() {
         return new ObjectMapper();
     }
 
+    // Spring asks all ViewResolvers to find and render the index.html view/template
+    // (or login.hrml, any html page)
     @Bean
     public ThymeleafViewResolver viewResolver() {
         ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
@@ -41,6 +55,7 @@ public class ApplicationConfiguration {
         return viewResolver;
     }
 
+    // ViewResolvers need a SpringTemplateEngine to work
     @Bean
     public SpringTemplateEngine templateEngine() {
         SpringTemplateEngine templateEngine = new SpringTemplateEngine();
@@ -48,6 +63,7 @@ public class ApplicationConfiguration {
         return templateEngine;
     }
 
+    // Specifies the location/path to find your templates
     @Bean
     public SpringResourceTemplateResolver templateResolver() {
         SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
